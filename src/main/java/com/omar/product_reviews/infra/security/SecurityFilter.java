@@ -22,7 +22,6 @@ public class SecurityFilter extends OncePerRequestFilter {
     private final TokenService tokenService;
     private final UserRepository userRepository;
 
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = this.recoverToken(request);
@@ -30,7 +29,7 @@ public class SecurityFilter extends OncePerRequestFilter {
             String email = tokenService.validateToken(token);
             User user = userRepository.findByEmail(email)
                     .orElseThrow(() -> new UsernameNotFoundException(String.format("User with email: %s, not found", email)));
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, null);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request, response);
