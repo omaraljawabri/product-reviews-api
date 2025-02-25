@@ -4,6 +4,7 @@ import com.omar.product_reviews.dtos.request.RegisterRequestDTO;
 import com.omar.product_reviews.services.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +21,8 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<Void> register(@RequestBody @Valid RegisterRequestDTO registerRequestDTO){
         authService.registerUser(registerRequestDTO);
-        return ResponseEntity.ok().build();
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
+
 }
