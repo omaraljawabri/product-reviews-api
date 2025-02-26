@@ -10,4 +10,7 @@ public interface ProductRepository extends MongoRepository<Product, String> {
 
     @Query(value = "{ name: ?0, category: ?1 }")
     Optional<Product> findByNameAndCategory(String name, String category);
+
+    @Query(value = "{ id: ?0, userId: ?1 }")
+    Optional<Product> findByIdAndUserId(String id, Long userId);
 }

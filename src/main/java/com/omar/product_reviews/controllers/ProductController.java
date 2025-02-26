@@ -1,5 +1,6 @@
 package com.omar.product_reviews.controllers;
 
+import com.omar.product_reviews.dtos.request.ProductPutRequestDTO;
 import com.omar.product_reviews.dtos.request.ProductRequestDTO;
 import com.omar.product_reviews.dtos.response.ProductResponseDTO;
 import com.omar.product_reviews.entities.User;
@@ -24,10 +25,18 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ProductResponseDTO> createProduct(@RequestPart(value = "file", required = false)MultipartFile file,
+    public ResponseEntity<ProductResponseDTO> createProduct(@RequestPart(value = "file", required = false) MultipartFile file,
                                                             @RequestPart("product") @Valid ProductRequestDTO productRequestDTO) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         return new ResponseEntity<>(productService.createProduct(file, productRequestDTO, user), HttpStatus.CREATED);
+    }
+
+    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ProductResponseDTO> updateProduct(@RequestPart(value = "file", required = false) MultipartFile file,
+                                                            @RequestPart("product") @Valid ProductPutRequestDTO productPutRequestDTO){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        return ResponseEntity.ok().body(productService.updateProduct(file, productPutRequestDTO, user));
     }
 }
