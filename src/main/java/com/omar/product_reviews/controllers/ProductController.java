@@ -39,4 +39,12 @@ public class ProductController {
         User user = (User) authentication.getPrincipal();
         return ResponseEntity.ok().body(productService.updateProduct(file, productPutRequestDTO, user));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> removeProduct(@PathVariable("id") String id){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        productService.removeProduct(id, user);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

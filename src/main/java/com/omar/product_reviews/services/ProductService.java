@@ -72,6 +72,12 @@ public class ProductService {
         return mapProductToProductResponse(savedProduct);
     }
 
+    public void removeProduct(String id, User user) {
+        Product product = productRepository.findByIdAndUserId(id, user.getId())
+                .orElseThrow(() -> new ValidationException(String.format("Product with id: %s does not belong to user with id: %d", id, user.getId())));
+        productRepository.delete(product);
+    }
+
     private ProductResponseDTO mapProductToProductResponse(Product product){
         return new ProductResponseDTO(
                 product.getId(), product.getUserId(), product.getName(), product.getDescription(),
