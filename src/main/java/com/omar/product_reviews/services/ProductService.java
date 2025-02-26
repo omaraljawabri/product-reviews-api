@@ -38,7 +38,8 @@ public class ProductService {
         Product savedProduct = productRepository.save(product);
         return new ProductResponseDTO(
                 savedProduct.getId(), savedProduct.getUserId(), savedProduct.getName(), savedProduct.getDescription(),
-                savedProduct.getPrice(), savedProduct.getCategory(), savedProduct.getImgUrl(), savedProduct.getCreatedAt()
+                savedProduct.getPrice(), savedProduct.getCategory(), savedProduct.getImgUrl(), savedProduct.getCreatedAt(),
+                savedProduct.getUpdatedAt()
         );
     }
 }
