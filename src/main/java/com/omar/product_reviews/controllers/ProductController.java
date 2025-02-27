@@ -2,6 +2,7 @@ package com.omar.product_reviews.controllers;
 
 import com.omar.product_reviews.dtos.request.ProductPutRequestDTO;
 import com.omar.product_reviews.dtos.request.ProductRequestDTO;
+import com.omar.product_reviews.dtos.response.ProductGetResponseDTO;
 import com.omar.product_reviews.dtos.response.ProductResponseDTO;
 import com.omar.product_reviews.entities.User;
 import com.omar.product_reviews.services.ProductService;
@@ -46,5 +47,10 @@ public class ProductController {
         User user = (User) authentication.getPrincipal();
         productService.removeProduct(id, user);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/name")
+    public ResponseEntity<ProductGetResponseDTO> findProductByName(@RequestParam("name") String name){
+        return ResponseEntity.ok().body(productService.findProductByName(name));
     }
 }

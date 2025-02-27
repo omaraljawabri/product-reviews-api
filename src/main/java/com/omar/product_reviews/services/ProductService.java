@@ -2,8 +2,11 @@ package com.omar.product_reviews.services;
 
 import com.omar.product_reviews.dtos.request.ProductPutRequestDTO;
 import com.omar.product_reviews.dtos.request.ProductRequestDTO;
+import com.omar.product_reviews.dtos.response.ProductGetResponseDTO;
 import com.omar.product_reviews.dtos.response.ProductResponseDTO;
+import com.omar.product_reviews.dtos.response.ReviewResponseDTO;
 import com.omar.product_reviews.entities.Product;
+import com.omar.product_reviews.entities.Review;
 import com.omar.product_reviews.entities.User;
 import com.omar.product_reviews.exceptions.EntityAlreadyExistsException;
 import com.omar.product_reviews.repositories.ProductRepository;
@@ -16,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -25,6 +30,7 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final CloudinaryService cloudinaryService;
+    private final UserService userService;
 
     @Transactional
     public ProductResponseDTO createProduct(MultipartFile file, @Valid ProductRequestDTO productRequestDTO, User user) throws IOException {
@@ -90,5 +96,29 @@ public class ProductService {
                 product.getPrice(), product.getCategory(), product.getImgUrl(), product.getCreatedAt(),
                 product.getUpdatedAt()
         );
+    }
+
+    public ProductGetResponseDTO findProductByName(String name) {
+        Optional<Product> optionalProduct = productRepository.findByName(name);
+        if (optionalProduct.isEmpty()){
+            return null;
+        }
+
+        Product product = optionalProduct.get();
+
+        List<ReviewResponseDTO> reviewsResponseDTO = new ArrayList<>();
+        User user;
+
+        if (product.getReviews() != null) {
+            for (Review review : product.getReviews()) {
+                user = userService.findUserById(review.getUserId());
+                reviewsResponseDTO.add(new ReviewResponseDTO(user.getFirstName(), user.getLastName(), review.getRating(),
+                        review.getComment()));
+            }
+        }
+
+        return new ProductGetResponseDTO(product.getId(), product.getUserId(), product.getName(), product.getDescription(),
+                product.getPrice(), product.getCategory() ,product.getImgUrl(), product.getCreatedAt(), product.getUpdatedAt(),
+                reviewsResponseDTO);
     }
 }
