@@ -150,7 +150,7 @@ public class ProductService {
             for (Review review : product.getReviews()) {
                 user = userService.findUserById(review.getUserId());
                 reviewsResponseDTO.add(new ReviewResponseDTO(user.getFirstName(), user.getLastName(), review.getRating(),
-                        review.getComment()));
+                        review.getComment(), review.getCreatedAt(), review.getUpdatedAt()));
             }
         }
 
