@@ -1,6 +1,8 @@
 package com.omar.product_reviews.repositories;
 
 import com.omar.product_reviews.entities.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
@@ -16,4 +18,6 @@ public interface ProductRepository extends MongoRepository<Product, String> {
 
     @Query(value = "{ name: ?0 }")
     Optional<Product> findByName(String name);
+
+    Page<Product> findByCategory(String category, Pageable pageable);
 }

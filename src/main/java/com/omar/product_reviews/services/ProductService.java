@@ -14,6 +14,8 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -90,6 +92,32 @@ public class ProductService {
         productRepository.delete(product);
     }
 
+    public ProductGetResponseDTO findProductByName(String name) {
+        Optional<Product> optionalProduct = productRepository.findByName(name);
+        if (optionalProduct.isEmpty()){
+            return null;
+        }
+
+        Product product = optionalProduct.get();
+
+        return setProductGetResponseDTO(product);
+    }
+
+    public List<ProductGetResponseDTO> findProductsByCategory(String category, int page, int quantity) {
+        Page<Product> pageableProducts = productRepository.findByCategory(category, PageRequest.of(page, quantity));
+        if (pageableProducts.isEmpty()){
+            return null;
+        }
+        List<Product> productList = pageableProducts.stream().toList();
+        List<ProductGetResponseDTO> productGetResponseDTOS = new ArrayList<>();
+
+        for (Product product: productList){
+            productGetResponseDTOS.add(setProductGetResponseDTO(product));
+        }
+
+        return productGetResponseDTOS;
+    }
+
     private ProductResponseDTO mapProductToProductResponse(Product product){
         return new ProductResponseDTO(
                 product.getId(), product.getUserId(), product.getName(), product.getDescription(),
@@ -98,13 +126,7 @@ public class ProductService {
         );
     }
 
-    public ProductGetResponseDTO findProductByName(String name) {
-        Optional<Product> optionalProduct = productRepository.findByName(name);
-        if (optionalProduct.isEmpty()){
-            return null;
-        }
-
-        Product product = optionalProduct.get();
+    private ProductGetResponseDTO setProductGetResponseDTO(Product product){
 
         List<ReviewResponseDTO> reviewsResponseDTO = new ArrayList<>();
         User user;
@@ -121,4 +143,5 @@ public class ProductService {
                 product.getPrice(), product.getCategory() ,product.getImgUrl(), product.getCreatedAt(), product.getUpdatedAt(),
                 reviewsResponseDTO);
     }
+
 }

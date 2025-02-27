@@ -4,6 +4,7 @@ import com.omar.product_reviews.dtos.request.ProductPutRequestDTO;
 import com.omar.product_reviews.dtos.request.ProductRequestDTO;
 import com.omar.product_reviews.dtos.response.ProductGetResponseDTO;
 import com.omar.product_reviews.dtos.response.ProductResponseDTO;
+import com.omar.product_reviews.entities.Product;
 import com.omar.product_reviews.entities.User;
 import com.omar.product_reviews.services.ProductService;
 import jakarta.validation.Valid;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/products")
@@ -52,5 +54,12 @@ public class ProductController {
     @GetMapping("/name")
     public ResponseEntity<ProductGetResponseDTO> findProductByName(@RequestParam("name") String name){
         return ResponseEntity.ok().body(productService.findProductByName(name));
+    }
+
+    @GetMapping("/category")
+    public ResponseEntity<List<ProductGetResponseDTO>> findProductsByCategory(@RequestParam("category") String category,
+                                                                @RequestParam(value = "page", defaultValue = "0", required = false) int page,
+                                                                @RequestParam(value = "quantity", defaultValue = "10", required = false) int quantity){
+        return ResponseEntity.ok().body(productService.findProductsByCategory(category, page, quantity));
     }
 }
