@@ -118,6 +118,21 @@ public class ProductService {
         return productGetResponseDTOS;
     }
 
+    public List<ProductGetResponseDTO> findProductsByUserId(Long id) {
+        List<Product> products = productRepository.findByUserId(id);
+        if (products.isEmpty()) {
+            return null;
+        }
+
+        List<ProductGetResponseDTO> productGetResponseDTOS = new ArrayList<>();
+
+        for (Product product: products){
+            productGetResponseDTOS.add(setProductGetResponseDTO(product));
+        }
+
+        return productGetResponseDTOS;
+    }
+
     private ProductResponseDTO mapProductToProductResponse(Product product){
         return new ProductResponseDTO(
                 product.getId(), product.getUserId(), product.getName(), product.getDescription(),
@@ -143,5 +158,4 @@ public class ProductService {
                 product.getPrice(), product.getCategory() ,product.getImgUrl(), product.getCreatedAt(), product.getUpdatedAt(),
                 reviewsResponseDTO);
     }
-
 }

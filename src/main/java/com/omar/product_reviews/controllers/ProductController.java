@@ -62,4 +62,9 @@ public class ProductController {
                                                                 @RequestParam(value = "quantity", defaultValue = "10", required = false) int quantity){
         return ResponseEntity.ok().body(productService.findProductsByCategory(category, page, quantity));
     }
+
+    @GetMapping("/user/{id}")
+    public ResponseEntity<List<ProductGetResponseDTO>> findProductsByUserId(@PathVariable("id") Long id){
+        return ResponseEntity.ok().body(productService.findProductsByUserId(id));
+    }
 }

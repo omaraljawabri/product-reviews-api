@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ProductRepository extends MongoRepository<Product, String> {
@@ -20,4 +21,7 @@ public interface ProductRepository extends MongoRepository<Product, String> {
     Optional<Product> findByName(String name);
 
     Page<Product> findByCategory(String category, Pageable pageable);
+
+    @Query(value = "{ userId: ?0 }")
+    List<Product> findByUserId(Long id);
 }
