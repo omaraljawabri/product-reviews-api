@@ -7,6 +7,7 @@ import com.omar.product_reviews.entities.Product;
 import com.omar.product_reviews.entities.User;
 import com.omar.product_reviews.exceptions.EntityAlreadyExistsException;
 import com.omar.product_reviews.repositories.ProductRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
@@ -73,6 +74,11 @@ public class ProductService {
     }
 
     public void removeProduct(String id, User user) {
+
+        if (productRepository.findById(id).isEmpty()){
+            throw new EntityNotFoundException(String.format("Product with id: %s, not found", id));
+        }
+
         Product product = productRepository.findByIdAndUserId(id, user.getId())
                 .orElseThrow(() -> new ValidationException(String.format("Product with id: %s does not belong to user with id: %d", id, user.getId())));
         productRepository.delete(product);
