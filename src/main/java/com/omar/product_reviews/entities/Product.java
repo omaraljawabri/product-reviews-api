@@ -37,6 +37,8 @@ public class Product {
 
     private String imgUrl;
 
+    private Double averageRating;
+
     @CreatedDate
     private LocalDateTime createdAt;
 

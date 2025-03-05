@@ -41,6 +41,7 @@ public class ReviewService {
             product.setReviews(new ArrayList<>());
         }
         product.getReviews().add(review);
+        product.setAverageRating(calculateAverageRating(product));
         Product savedProduct = productService.saveProduct(product);
         return new ReviewResponseDTO(user.getFirstName(), user.getLastName(), review.getRating(), review.getComment(),
                 savedProduct.getReviews().getLast().getCreatedAt(), savedProduct.getReviews().getLast().getUpdatedAt());
@@ -69,6 +70,7 @@ public class ReviewService {
         Review review = Review.builder().userId(user.getId()).rating(reviewRequestDTO.rating()).comment(reviewRequestDTO.comment())
                 .createdAt(createdAt).updatedAt(LocalDateTime.now()).build();
         product.getReviews().add(review);
+        product.setAverageRating(calculateAverageRating(product));
         Product savedProduct = productService.saveProduct(product);
         return new ReviewResponseDTO(user.getFirstName(), user.getLastName(), reviewRequestDTO.rating(), reviewRequestDTO.comment(),
                 savedProduct.getReviews().getLast().getCreatedAt(), savedProduct.getReviews().getLast().getUpdatedAt());
@@ -88,6 +90,21 @@ public class ReviewService {
             }
         }
 
+        product.setAverageRating(calculateAverageRating(product));
+
         productService.saveProduct(product);
+    }
+
+    private Double calculateAverageRating(Product product){
+        Double total = 0D;
+        if (product.getReviews() == null || product.getReviews().isEmpty()){
+            return 0D;
+        }
+
+        for (Review review : product.getReviews()){
+            total += review.getRating();
+        }
+
+        return total/product.getReviews().size();
     }
 }
