@@ -72,4 +72,10 @@ public class ProductController {
                                                                                 @RequestParam(value = "quantity", defaultValue = "10", required = false) int quantity){
         return ResponseEntity.ok().body(productService.findProductsByBestRating(page, quantity));
     }
+
+    @GetMapping("/rating/worst")
+    public ResponseEntity<List<ProductGetResponseDTO>> findProductsByWorstRating(@RequestParam(value = "page", defaultValue = "0", required = false) int page,
+                                                                                 @RequestParam(value = "quantity", defaultValue = "10", required = false) int quantity){
+        return ResponseEntity.ok().body(productService.findProductsByWorstRating(page, quantity));
+    }
 }

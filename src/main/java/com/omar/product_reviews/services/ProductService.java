@@ -132,6 +132,22 @@ public class ProductService {
         return productGetResponseDTOS;
     }
 
+    public List<ProductGetResponseDTO> findProductsByWorstRating(int page, int quantity) {
+        Page<Product> products = productRepository.findAll(PageRequest.of(page, quantity, Sort.by(Sort.Direction.ASC, "averageRating")));
+        if (products.isEmpty()){
+            return Collections.emptyList();
+        }
+
+        List<Product> productList = products.stream().toList();
+        List<ProductGetResponseDTO> productGetResponseDTOS = new ArrayList<>();
+
+        for (Product product: productList){
+            productGetResponseDTOS.add(setProductGetResponseDTO(product));
+        }
+
+        return productGetResponseDTOS;
+    }
+
     public List<ProductGetResponseDTO> findProductsByUserId(Long id) {
         List<Product> products = productRepository.findByUserId(id);
         if (products.isEmpty()) {
@@ -149,6 +165,16 @@ public class ProductService {
 
     public boolean reviewExistsByProductIdAndUserId(String id, Long userId){
         return productRepository.findByIdAndReviews_UserId(id, userId).isPresent();
+    }
+
+    public Product findById(String id){
+        return productRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Product with id: %s, not found", id)));
+
+    }
+
+    public Product saveProduct(Product product){
+        return productRepository.save(product);
     }
 
     private ProductResponseDTO mapProductToProductResponse(Product product){
@@ -175,15 +201,5 @@ public class ProductService {
         return new ProductGetResponseDTO(product.getId(), product.getUserId(), product.getName(), product.getDescription(),
                 product.getPrice(), product.getCategory() ,product.getImgUrl(), product.getAverageRating(), product.getCreatedAt(), product.getUpdatedAt(),
                 reviewsResponseDTO);
-    }
-
-    public Product findById(String id){
-        return productRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(String.format("Product with id: %s, not found", id)));
-
-    }
-
-    public Product saveProduct(Product product){
-        return productRepository.save(product);
     }
 }
