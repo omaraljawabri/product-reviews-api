@@ -26,4 +26,5 @@ public interface ProductRepository extends MongoRepository<Product, String> {
     List<Product> findByUserId(Long id);
 
     Optional<Product> findByIdAndReviews_UserId(String id, Long userId);
+
 }

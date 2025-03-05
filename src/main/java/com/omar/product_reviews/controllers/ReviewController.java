@@ -31,4 +31,12 @@ public class ReviewController {
         User user = (User) authentication.getPrincipal();
         return ResponseEntity.ok().body(reviewService.updateReview(reviewRequestDTO, user));
     }
+
+    @DeleteMapping("/productId/{id}")
+    public ResponseEntity<Void> deleteReview(@PathVariable("id") String productId){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        reviewService.deleteReview(user, productId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }

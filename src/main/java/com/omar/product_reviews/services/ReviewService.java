@@ -65,4 +65,21 @@ public class ReviewService {
         return new ReviewResponseDTO(user.getFirstName(), user.getLastName(), reviewRequestDTO.rating(), reviewRequestDTO.comment(),
                 savedProduct.getReviews().getLast().getCreatedAt(), savedProduct.getReviews().getLast().getUpdatedAt());
     }
+
+    public void deleteReview(User user, String productId) {
+        if (!productService.reviewExistsByProductIdAndUserId(productId, user.getId())){
+            throw new EntityNotFoundException(String.format("Review from user with id: %d of product with id: %s, not found", user.getId(), productId));
+        }
+
+        Product product = productService.findById(productId);
+
+        for (int i = 0; i < product.getReviews().size(); i++) {
+            if (product.getReviews().get(i).getUserId().equals(user.getId())){
+                product.getReviews().remove(i);
+                break;
+            }
+        }
+
+        productService.saveProduct(product);
+    }
 }
