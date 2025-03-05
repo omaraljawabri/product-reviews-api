@@ -25,6 +25,10 @@ public class ReviewService {
             throw new EntityAlreadyExistsException(String.format("User with id: %d, already posted a review about this product", user.getId()));
         }
 
+        if (reviewRequestDTO.rating() > 5D || reviewRequestDTO.rating() < 0D){
+            throw new ValidationException("Review rating must be between 0 and 5");
+        }
+
         Product product = productService.findById(reviewRequestDTO.productId());
 
         if (product.getUserId().equals(user.getId())){
@@ -45,6 +49,10 @@ public class ReviewService {
     public ReviewResponseDTO updateReview(ReviewRequestDTO reviewRequestDTO, User user) {
         if (!productService.reviewExistsByProductIdAndUserId(reviewRequestDTO.productId(), user.getId())){
             throw new EntityNotFoundException(String.format("Review from user with id: %d of product with id: %s, not found", user.getId(), reviewRequestDTO.productId()));
+        }
+
+        if (reviewRequestDTO.rating() > 5D || reviewRequestDTO.rating() < 0D){
+            throw new ValidationException("Review rating must be between 0 and 5");
         }
 
         Product product = productService.findById(reviewRequestDTO.productId());

@@ -15,7 +15,7 @@ public class Review {
 
     private Long userId;
 
-    private Rating rating;
+    private Double rating;
 
     private String comment;
 
