@@ -133,6 +133,10 @@ public class ProductService {
         return productGetResponseDTOS;
     }
 
+    public boolean reviewExistsByProductIdAndUserId(String id, Long userId){
+        return productRepository.findByIdAndReviews_UserId(id, userId).isPresent();
+    }
+
     private ProductResponseDTO mapProductToProductResponse(Product product){
         return new ProductResponseDTO(
                 product.getId(), product.getUserId(), product.getName(), product.getDescription(),
@@ -157,5 +161,15 @@ public class ProductService {
         return new ProductGetResponseDTO(product.getId(), product.getUserId(), product.getName(), product.getDescription(),
                 product.getPrice(), product.getCategory() ,product.getImgUrl(), product.getCreatedAt(), product.getUpdatedAt(),
                 reviewsResponseDTO);
+    }
+
+    public Product findById(String id){
+        return productRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Product with id: %s, not found", id)));
+
+    }
+
+    public Product saveProduct(Product product){
+        return productRepository.save(product);
     }
 }
