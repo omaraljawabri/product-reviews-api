@@ -39,7 +39,8 @@ public class ProductService {
         }
 
         Product product = Product.builder().userId(user.getId()).name(productRequestDTO.name()).category(productRequestDTO.category())
-                .description(productRequestDTO.description()).price(productRequestDTO.price()).build();
+                .description(productRequestDTO.description()).price(productRequestDTO.
+                        price()).build();
 
         if (file != null){
             String imgUrl = cloudinaryService.uploadFile(file);
@@ -151,7 +152,7 @@ public class ProductService {
     public List<ProductGetResponseDTO> findProductsByUserId(Long id) {
         List<Product> products = productRepository.findByUserId(id);
         if (products.isEmpty()) {
-            return null;
+            return Collections.emptyList();
         }
 
         List<ProductGetResponseDTO> productGetResponseDTOS = new ArrayList<>();
