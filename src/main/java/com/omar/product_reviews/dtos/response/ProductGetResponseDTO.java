@@ -12,6 +12,7 @@ public record ProductGetResponseDTO(
         BigDecimal price,
         String category,
         String imgUrl,
+        Double averageRating,
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
         List<ReviewResponseDTO> reviews

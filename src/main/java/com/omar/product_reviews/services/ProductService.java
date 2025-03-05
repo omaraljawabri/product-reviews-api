@@ -16,15 +16,13 @@ import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -106,9 +104,25 @@ public class ProductService {
     public List<ProductGetResponseDTO> findProductsByCategory(String category, int page, int quantity) {
         Page<Product> pageableProducts = productRepository.findByCategory(category, PageRequest.of(page, quantity));
         if (pageableProducts.isEmpty()){
-            return null;
+            return Collections.emptyList();
         }
         List<Product> productList = pageableProducts.stream().toList();
+        List<ProductGetResponseDTO> productGetResponseDTOS = new ArrayList<>();
+
+        for (Product product: productList){
+            productGetResponseDTOS.add(setProductGetResponseDTO(product));
+        }
+
+        return productGetResponseDTOS;
+    }
+
+    public List<ProductGetResponseDTO> findProductsByBestRating(int page, int quantity) {
+        Page<Product> products = productRepository.findAll(PageRequest.of(page, quantity, Sort.by(Sort.Direction.DESC, "averageRating")));
+        if (products.isEmpty()){
+            return Collections.emptyList();
+        }
+
+        List<Product> productList = products.stream().toList();
         List<ProductGetResponseDTO> productGetResponseDTOS = new ArrayList<>();
 
         for (Product product: productList){
@@ -159,7 +173,7 @@ public class ProductService {
         }
 
         return new ProductGetResponseDTO(product.getId(), product.getUserId(), product.getName(), product.getDescription(),
-                product.getPrice(), product.getCategory() ,product.getImgUrl(), product.getCreatedAt(), product.getUpdatedAt(),
+                product.getPrice(), product.getCategory() ,product.getImgUrl(), product.getAverageRating(), product.getCreatedAt(), product.getUpdatedAt(),
                 reviewsResponseDTO);
     }
 

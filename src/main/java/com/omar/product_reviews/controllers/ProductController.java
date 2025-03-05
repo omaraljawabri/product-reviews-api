@@ -4,7 +4,6 @@ import com.omar.product_reviews.dtos.request.ProductPutRequestDTO;
 import com.omar.product_reviews.dtos.request.ProductRequestDTO;
 import com.omar.product_reviews.dtos.response.ProductGetResponseDTO;
 import com.omar.product_reviews.dtos.response.ProductResponseDTO;
-import com.omar.product_reviews.entities.Product;
 import com.omar.product_reviews.entities.User;
 import com.omar.product_reviews.services.ProductService;
 import jakarta.validation.Valid;
@@ -66,5 +65,11 @@ public class ProductController {
     @GetMapping("/user/{id}")
     public ResponseEntity<List<ProductGetResponseDTO>> findProductsByUserId(@PathVariable("id") Long id){
         return ResponseEntity.ok().body(productService.findProductsByUserId(id));
+    }
+
+    @GetMapping("/rating/best")
+    public ResponseEntity<List<ProductGetResponseDTO>> findProductsByBestRating(@RequestParam(value = "page", defaultValue = "0", required = false) int page,
+                                                                                @RequestParam(value = "quantity", defaultValue = "10", required = false) int quantity){
+        return ResponseEntity.ok().body(productService.findProductsByBestRating(page, quantity));
     }
 }
