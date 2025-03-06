@@ -31,6 +31,24 @@ services:
       - ME_CONFIG_MONGODB_ADMINPASSWORD=admin
       - ME_CONFIG_MONGODB_SERVER=mongodb
 
+  product-reviews:
+    image: omarjawabri/product-reviews
+    ports:
+      - 8080:8080
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/product-reviews-db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_DATA_MONGODB_HOST: mongodb
+      SPRING_DATA_MONGODB_USERNAME: admin
+      SPRING_DATA_MONGODB_PASSWORD: admin
+      CLOUDINARY_CLOUD-NAME: ${CLOUDINARY_NAME}
+      CLOUDINARY_API-KEY: ${CLOUDINARY-KEY}
+      CLOUDINARY_API-SECRET: ${CLOUDINARY-SECRET}
+    depends_on:
+      - postgres
+      - mongodb
+
 volumes:
   postgres-data:
   mongo:
