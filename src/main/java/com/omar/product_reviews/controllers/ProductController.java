@@ -8,6 +8,7 @@ import com.omar.product_reviews.entities.User;
 import com.omar.product_reviews.infra.handler.ErrorMessage;
 import com.omar.product_reviews.services.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -42,11 +43,18 @@ public class ProductController {
             @ApiResponse(responseCode = "201", description = "Successful operation!"),
             @ApiResponse(responseCode = "400", description = "Bad Request",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content()),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content()),
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content())
     })
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ProductResponseDTO> createProduct(@RequestPart(value = "file", required = false) MultipartFile file,
-                                                            @RequestPart("product") @Valid ProductRequestDTO productRequestDTO) throws IOException {
+    public ResponseEntity<ProductResponseDTO> createProduct(    @Parameter(description = "Imagem do produto", content = @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE))
+                                                                @RequestPart(value = "file", required = false) MultipartFile file,
+                                                                @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                                                                    description = "Dados do produto em JSON",
+                                                                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ProductRequestDTO.class))
+                                                                )
+                                                                @RequestPart("product") @Valid ProductRequestDTO productRequestDTO) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         return new ResponseEntity<>(productService.createProduct(file, productRequestDTO, user), HttpStatus.CREATED);
@@ -58,6 +66,8 @@ public class ProductController {
             @ApiResponse(responseCode = "200", description = "Successful operation!"),
             @ApiResponse(responseCode = "400", description = "Bad Request",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content()),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content()),
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content())
     })
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -74,6 +84,8 @@ public class ProductController {
             @ApiResponse(responseCode = "204", description = "Successful operation!"),
             @ApiResponse(responseCode = "400", description = "Bad Request",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content()),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content()),
             @ApiResponse(responseCode = "404", description = "Not found",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content())
@@ -90,6 +102,8 @@ public class ProductController {
             method = "GET")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful operation!"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content()),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content()),
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content())
     })
     @GetMapping("/name")
@@ -101,6 +115,8 @@ public class ProductController {
             method = "GET")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful operation!"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content()),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content()),
             @ApiResponse(responseCode = "404", description = "Not found",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content())
@@ -116,6 +132,8 @@ public class ProductController {
             method = "GET")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful operation!"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content()),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content()),
             @ApiResponse(responseCode = "404", description = "Not found",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content())
@@ -129,6 +147,8 @@ public class ProductController {
             method = "GET")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful operation!"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content()),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content()),
             @ApiResponse(responseCode = "404", description = "Not found",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content())
@@ -143,6 +163,8 @@ public class ProductController {
             method = "GET")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful operation!"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content()),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content()),
             @ApiResponse(responseCode = "404", description = "Not found",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content())
