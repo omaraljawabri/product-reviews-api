@@ -50,7 +50,8 @@ CLOUDINARY_SECRET=<your-cloudinary-secret>
 Springdoc OpenAPI was used to document this API. You can access the documentation at the link below after starting the application:
 `http://localhost:8080/swagger-ui/index.html`
 
-    Note: The POST and PUT endpoints at http://localhost:8080/api/v1/products do not work in Swagger. For these, use Postman or another HTTP request tool.
+        Note: The POST and PUT endpoints at http://localhost:8080/api/v1/products 
+    do not work in Swagger. For these, use Postman or another HTTP request tool.
 
 ## 💻 Project used technologies
 
