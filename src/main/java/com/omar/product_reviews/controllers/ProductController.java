@@ -48,13 +48,8 @@ public class ProductController {
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content())
     })
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ProductResponseDTO> createProduct(    @Parameter(description = "Imagem do produto", content = @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE))
-                                                                @RequestPart(value = "file", required = false) MultipartFile file,
-                                                                @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                                                                    description = "Dados do produto em JSON",
-                                                                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ProductRequestDTO.class))
-                                                                )
-                                                                @RequestPart("product") @Valid ProductRequestDTO productRequestDTO) throws IOException {
+    public ResponseEntity<ProductResponseDTO> createProduct(@RequestPart(value = "file", required = false) MultipartFile file,
+                                                            @RequestPart("product") @Valid ProductRequestDTO productRequestDTO) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         return new ResponseEntity<>(productService.createProduct(file, productRequestDTO, user), HttpStatus.CREATED);
