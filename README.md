@@ -23,7 +23,7 @@ If you're using Docker, follow the instructions below to start the application:
     4. Wait until all the containers are up and running
     5. The application is up! http://localhost:8080
 
-If you're not using docker, but have JDK 21 and Maven 3.9.x, follow the instructions below to run the application:
+If you're not using Docker but have JDK 21 and Maven 3.9.x installed, follow these steps to start the application:
 
     1. Clone this repository or download the zip version and unzip it
     2. Make sure PostgreSQL and MongoDB are up and running
